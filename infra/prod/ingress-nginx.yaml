@@ -23,7 +23,20 @@ spec:
     repoURL: https://github.com/wadhekarpankaj/k8s-infrastructure.git
     helm:
       values: |-
-        replicaCount: 1
+        replicaCount: 2
+        controller:
+          service:
+            type: NodePort
+          ingressClassResource:
+            name: ingress-nginx
+            default: true
+            controllerValue: "k8s.io/ingress-nginx"
+          ingressClass: ingress-nginx
+          updateStrategy:
+            rollingUpdate:
+              maxUnavailable: 1
+            type: RollingUpdate
+
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
