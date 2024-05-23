@@ -26,5 +26,5 @@ spec:
     repoURL: https://github.com/wadhekarpankaj/k8s-infrastructure.git
     helm:
       values: |-
-        {{- .Files.Get "configs/argocd-apps-config.yaml" | nindent 8 }}
+        {{- .Files.Get "../configs/argocd-apps-config.yaml" | nindent 8 }}
 
