@@ -1,0 +1,18 @@
+projects:
+- name: main
+  additionalAnnotations:
+    "helm.sh/resource-policy": keep
+  destinations:
+    - namespace: '*'
+      server: https://kubernetes.default.svc
+  sourceRepos:
+    - 'https://argoproj.github.io/argo-helm'
+    - 'https://github.com/wadhekarpankaj/k8s-infrastructure.git'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  orphanedResources:
+    warn: false

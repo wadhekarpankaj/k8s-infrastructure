@@ -1,0 +1,17 @@
+projects:
+- name: testproject
+  applications:
+  - name: app-infra
+    differentProject: projects-infra
+  - name: app-prod
+    role: dev
+  - name: app-stg
+    role: adm
+- name: testproject2
+  applications:
+  - name: app-infra
+    differentProject: projects-infra
+  - name: app-prod
+    role: dev
+  - name: app-stg
+    role: adm

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dnsmasq-conf
+  namespace: kube-system
+data:
+  dnsmasq.conf: |
+    bind-interfaces
+    domain-needed
+    bogus-priv
+    no-resolv
+    expand-hosts
+    domain={{ .Values.domain }}
+    log-queries
+    address=/{{ .Values.domain }}/{{ .Values.resolver }}

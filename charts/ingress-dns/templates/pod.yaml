@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-ingress-dns
+  namespace: kube-system
+  labels:
+    app: ingress-dns
+    app.kubernetes.io/part-of: kube-system
+spec:
+  containers:
+    - name: dnsmasq
+      image: harbor2.hometogo.rocks/base-images/dnsmasq:latest
+      imagePullPolicy: IfNotPresent
+      ports:
+        - name: dns
+          containerPort: 53
+          protocol: UDP
+      volumeMounts:
+        - mountPath: /etc/dnsmasq.conf
+          subPath: dnsmasq.conf
+          name: dnsmasq-conf
+  volumes:
+    - name: dnsmasq-conf
+      configMap:
+        name: dnsmasq-conf

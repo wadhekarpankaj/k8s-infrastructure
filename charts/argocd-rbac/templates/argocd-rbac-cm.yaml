@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+data:
+  policy.default: role:{{ .Values.default.role }}
+  scopes: '[groups]'
+  policy.csv: |
+    g, htg-acd-adm, role:admin
+    g, htg-acd-ro, role:readonly
+  {{- range $project := $.Values.projects }}
+    {{- range $application := $project.applications }}
+    {{- $argocdProjectName := ternary $application.differentProject $project.name (hasKey $application "differentProject") }}
+
+    p, role:htg-acd-{{ $project.name }}-dev-role, applications, get, {{ $argocdProjectName }}/{{ $application.name }}, allow
+    p, role:htg-acd-{{ $project.name }}-dev-role, projects, get, {{ $argocdProjectName }}/{{ $application.name }}, allow
+    p, role:htg-acd-{{ $project.name }}-dev-role, logs, get, {{ $argocdProjectName }}/{{ $application.name }}, allow
+
+      {{- if or (eq $application.role "adm") (eq $application.role "dev")}}
+    p, role:htg-acd-{{ $project.name }}-dev-role, applications, update,  {{ $argocdProjectName }}/{{ $application.name }}, allow
+    p, role:htg-acd-{{ $project.name }}-dev-role, applications, sync, {{ $argocdProjectName }}/{{ $application.name }}, allow
+    p, role:htg-acd-{{ $project.name }}-dev-role, applications, override, {{ $argocdProjectName }}/{{ $application.name }}, allow
+      {{- end }}
+
+      {{- if eq $application.role "adm"}}
+    p, role:htg-acd-{{ $project.name }}-dev-role, applications, delete, {{ $argocdProjectName }}/{{ $application.name }}, allow
+      {{- end}}
+    {{- end }}
+
+    g, htg-acd-{{ $project.name }}-dev, role:htg-acd-{{ $project.name }}-dev-role
+    g, htg-acd-{{ $project.name }}-sa, role:htg-acd-{{ $project.name }}-dev-role
+  {{ end }}
