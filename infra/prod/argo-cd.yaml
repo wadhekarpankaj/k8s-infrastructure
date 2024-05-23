@@ -34,6 +34,11 @@ spec:
         server:
           clusterAdminAccess:
             enabled: true
+          ingress:
+            ingressClassName: ingress-nginx
+            enabled: true
+            hosts:
+              - argocd.k8s.test
         configs:
           cm:
             url: http://argocd.k8s.test
