@@ -37,8 +37,7 @@ spec:
           ingress:
             ingressClassName: ingress-nginx
             enabled: true
-            hosts:
-              - argocd.k8s.test
+            hostname: argocd.k8s.test
         configs:
           cm:
             url: http://argocd.k8s.test
