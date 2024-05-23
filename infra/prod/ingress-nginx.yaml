@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-nginx
+  namespace: argocd
+  annotations:
+    "helm.sh/resource-policy": keep
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  labels:
+    tool: ingress-nginx
+spec:
+  info:
+    - name: Description
+      value: "Prepares ingress-nginx controller for cluster"
+  destination:
+    name: ''
+    namespace: ingress-nginx
+    server: https://kubernetes.default.svc
+  source:
+    targetRevision: HEAD
+    path: charts/ingress-nginx
+    repoURL: https://github.com/wadhekarpankaj/k8s-infrastructure.git
+    helm:
+      values: |-
+        replicaCount: 1
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      selfHeal: true
+  project: main
