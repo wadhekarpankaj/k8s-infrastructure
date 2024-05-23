@@ -31,3 +31,16 @@ spec:
         fullnameOverride: argocd
         dex:
           enabled: false
+        server:
+          clusterAdminAccess:
+            enabled: true
+        configs:
+          cm:
+            url: http://argocd.k8s.test
+            users.anonymous.enabled: true
+          rbac:
+            create: false
+          params:
+            server.insecure: true
+            server.logFormat: json
+            server.disable.auth: true
