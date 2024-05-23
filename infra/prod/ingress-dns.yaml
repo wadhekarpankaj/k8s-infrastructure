@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-dns
+  namespace: argocd
+  annotations:
+    "helm.sh/resource-policy": keep
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  destination:
+    namespace: kube-system
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      selfHeal: true
+  source:
+    targetRevision: HEAD
+    path: charts/ingress-dns
+    repoURL: https://github.com/wadhekarpankaj/k8s-infrastructure.git
+    helm:
+      values:
