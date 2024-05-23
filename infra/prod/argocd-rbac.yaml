@@ -22,7 +22,7 @@ spec:
       selfHeal: true
   source:
     targetRevision: HEAD
-    path: charts/argo-cd
+    path: charts/argocd-rbac
     repoURL: https://github.com/wadhekarpankaj/k8s-infrastructure.git
     helm:
       values: |-
