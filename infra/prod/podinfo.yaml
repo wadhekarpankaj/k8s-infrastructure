@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: podinfo
+  namespace: podinfo
+  annotations:
+    "helm.sh/resource-policy": keep
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    tool: argocd
+spec:
+  project: main
+  info:
+    - name: Description
+      value: "Prepares resources for podinfo"
+  destination:
+    namespace: podinfo
+    server: https://kubernetes.default.svc
+  source:
+    targetRevision: HEAD
+    path: charts/podinfo
+    repoURL: https://github.com/wadhekarpankaj/k8s-infrastructure.git
+    helm:
+      values: |-
+        ingress:
+          enabled: true
+          className: "ingress-nginx-internal"
+          hosts:
+            - host: podinfo.k8s.test
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      selfHeal: true
